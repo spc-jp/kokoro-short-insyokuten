@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ココロ・ショート 飲食店版</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  body {
+    font-family: 'Hiragino Maru Gothic ProN', 'ヒラギノ丸ゴ ProN W4', 'Hiragino Sans', 'Yu Gothic', 'メイリオ', sans-serif;
+    background-color: #FFF8E7;
+    color: #3D2817;
+  }
+  .warm-shadow {
+    box-shadow: 0 4px 14px rgba(230, 126, 34, 0.15);
+    transition: all 0.3s ease;
+  }
+  .warm-shadow:hover {
+    box-shadow: 0 6px 20px rgba(230, 126, 34, 0.28);
+    transform: translateY(-2px);
+  }
+  .wood-pattern {
+    background-image: repeating-linear-gradient(45deg, rgba(139,69,19,0.08) 0, rgba(139,69,19,0.08) 2px, transparent 2px, transparent 24px);
+  }
+  .fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .section-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(230, 126, 34, 0.08);
+    border-left: 4px solid #E67E22;
+  }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: bold;
+    color: #C0651A;
+    margin-bottom: 0.75rem;
+    font-size: 1.05rem;
+  }
+  .bullet-item {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: #4A3528;
+  }
+  .bullet-mark {
+    color: #E67E22;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+  .caption-box {
+    background: #FFF8E7;
+    border-radius: 0.75rem;
+    padding: 0.875rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    border: 1px solid #F4D03F;
+    position: relative;
+  }
+  .copy-btn {
+    background: #E67E22;
+    color: white;
+    padding: 0.4rem 0.9rem;
+    border-radius: 9999px;
+    font-size: 0.78rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover {
+    background: #D35400;
+  }
+  .copy-btn.copied {
+    background: #27AE60;
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+const purposes = [
+  {
+    id: 'new-menu',
+    icon: '🍽',
+    title: '新メニュー紹介',
+    subtitle: '料理そのものを主役に',
+    description: '湯気とシズル感で「食べたい！」を引き出す。週末投稿が効果的。',
+    recommendedScenes: ['food', 'cooking']
+  },
+  {
+    id: 'lunch',
+    icon: '🌞',
+    title: 'ランチタイム集客',
+    subtitle: 'スピード感とお得感',
+    description: '平日10:30〜11:30の投稿でランチ直前の予約を狙う。',
+    recommendedScenes: ['food', 'interior', 'staff']
+  },
+  {
+    id: 'dinner',
+    icon: '🌙',
+    title: 'ディナー予約獲得',
+    subtitle: '雰囲気と特別感',
+    description: '夜の店内とこだわり料理で「ここに来たい」を作る。',
+    recommendedScenes: ['interior', 'food']
+  },
+  {
+    id: 'takeout',
+    icon: '🥡',
+    title: 'テイクアウト訴求',
+    subtitle: 'パッケージと中身のギャップ',
+    description: '包装→開封→料理アップの3カット構成で購買意欲を刺激。',
+    recommendedScenes: ['food', 'cooking']
+  },
+  {
+    id: 'party',
+    icon: '🍻',
+    title: '宴会・貸切PR',
+    subtitle: '人数感と空間',
+    description: '忘年会・歓送迎会の2ヶ月前から逆算して投稿開始。',
+    recommendedScenes: ['interior', 'food', 'customer']
+  },
+  {
+    id: 'recruit',
+    icon: '👥',
+    title: '採用募集',
+    subtitle: '働く人と職場の空気',
+    description: 'スタッフの表情でリアルな働き方を伝える。通年OK。',
+    recommendedScenes: ['staff', 'cooking']
+  }
+];
+
+const scenes = [
+  { id: 'food', icon: '📷', title: '料理撮影', description: '湯気・シズル感・斜め45度が基本' },
+  { id: 'cooking', icon: '🔥', title: '調理風景', description: '手元のアップで臨場感を演出' },
+  { id: 'interior', icon: '🏠', title: '店内・外観', description: 'マジックアワーと自然光を活かす' },
+  { id: 'staff', icon: '😊', title: 'スタッフの笑顔', description: '料理に向き合う自然な表情を' },
+  { id: 'customer', icon: '🥂', title: 'お客様の様子', description: '必ず事前許可を取って撮影' }
+];
+
+// ========== 共通データ ==========
+const COMMON = {
+  basics: [
+    '縦撮り（9:16）で撮影。SNSは縦動画が主流',
+    '1カット3〜5秒が黄金時間。短く切るほど見られる',
+    '両手で持って脇を締める。これだけで手ブレ激減',
+    '100均の三脚（1,000円以下）があると一気にプロっぽく'
+  ],
+  restaurantTips: [
+    'BGM問題：店内BGMはSNS削除リスクあり。仕込み時間や開店前に撮るか、CapCutで元音を消してフリーBGMに差し替え',
+    '撮影タイミング：ランチ前11:00〜11:30、ディナー前17:00〜17:30が狙い目。繁忙時間は絶対NG',
+    'スマホ設定：HDRはオフ、ホワイトバランスは「太陽光」固定で色がブレない',
+    '料理は撮ったらすぐ提供。冷めたら本末転倒です'
+  ],
+  capcutSteps: [
+    { step: 'STEP1', title: 'カット編集', detail: '不要な部分を削って、3〜5秒の短いカットを並べる。テンポよく切るのがコツ' },
+    { step: 'STEP2', title: 'テキスト追加', detail: '料理名・価格・店名を大きめのフォントで。読みやすさ最優先' },
+    { step: 'STEP3', title: 'BGM＋効果音', detail: 'CapCut無料BGMから選ぶ。シズル音やお皿のカチャ音を入れると一気に本格的に' }
+  ]
+};
+
+// ========== 目的別データ（6パターン） ==========
+const PURPOSE_DATA = {
+  'new-menu': {
+    timing: '金・土の17:00〜18:00（ディナー予約のピーク前）',
+    bgmMood: '軽快なボサノバ、ジャズ風のアコースティック',
+    captions: {
+      instagram: '【新メニュー登場🍽】\n[料理名] ¥[価格]\n\nひと口で笑顔になる、新しい定番が生まれました。\nぜひお試しください。\n\n📍[店名]\n#新メニュー #[地域名]グルメ #飯テロ',
+      tiktok: '新メニュー入りました🔥\n[料理名] ¥[価格]\nこの湯気、伝わりますか？\n#新メニュー #飯テロ #グルメ',
+      line: '【新メニューのお知らせ】\nいつもありがとうございます🍽\n本日より「[料理名]」が新登場です。\n\n¥[価格]\nぜひ味わいに来てくださいね✨'
+    }
+  },
+  'lunch': {
+    timing: '平日10:30〜11:30（ランチタイム直前）',
+    bgmMood: '明るいウクレレ、爽やかなアコースティック',
+    captions: {
+      instagram: '本日のランチ☀\n[メニュー名] ¥[価格]\n\nサクッと美味しい、お昼の時間🍽\n11:30 OPEN、お待ちしております。\n\n📍[店名]\n#ランチ #[地域名]ランチ #今日のランチ',
+      tiktok: '今日のランチ何にしよ🤔\nあったかいうちにどうぞ☀\n¥[価格] / 11:30〜\n#ランチ #飯テロ',
+      line: '【本日のランチ】\nおはようございます☀\n本日のおすすめは「[メニュー名]」¥[価格]です。\n\n11:30からお待ちしております🍽'
+    }
+  },
+  'dinner': {
+    timing: '平日17:00〜18:30（仕事帰りのディナー検索タイム）',
+    bgmMood: 'しっとりピアノ、上質なローファイ',
+    captions: {
+      instagram: '夜の[店名]🍷\n\n大切な人と過ごす、特別な時間を。\nコース ¥[価格]〜 / ご予約承ります。\n\n📍[住所]\n#ディナー #記念日 #[地域名]ディナー',
+      tiktok: '今夜どこ行く？🌙\n大人の隠れ家、見つけました。\n[店名] / ご予約はプロフから\n#ディナー #デート #隠れ家',
+      line: '【ディナー予約受付中】\n今週末、まだお席に余裕がございます🌙\nご予約はLINEからもどうぞ。\n\nスタッフ一同お待ちしております✨'
+    }
+  },
+  'takeout': {
+    timing: '平日11:00、金土17:00（食事前の検索タイム）',
+    bgmMood: 'ポップなインストゥルメンタル、明るいエレクトロニカ',
+    captions: {
+      instagram: 'テイクアウト始めました🥡\n\n[メニュー名] ¥[価格]\nおうちで、お店の味を。\n\n📍[店名] / TEL[番号]\n#テイクアウト #おうちごはん #[地域名]テイクアウト',
+      tiktok: 'テイクアウトの中身、開けてみた👀\nおうちで本格[料理ジャンル]🥡\n¥[価格] / [店名]\n#テイクアウト #飯テロ',
+      line: '【テイクアウトのご案内】\nおうちでも、お店の味をお楽しみください🥡\n\n「[メニュー名]」¥[価格]\nご注文はお電話で承ります☎'
+    }
+  },
+  'party': {
+    timing: '忘年会は10月から、歓送迎会は1月から逆算開始',
+    bgmMood: '楽しげなブラスバンド、賑やかなジャズ',
+    captions: {
+      instagram: '宴会承ります🍻\n\n[人数]名様まで貸切OK\n飲み放題付きコース ¥[価格]〜\n\n📍[店名] / お早めにご予約を。\n#宴会 #忘年会 #貸切',
+      tiktok: '会社の宴会、ここで決まり🍻\n[人数]名OK / 飲み放題付き¥[価格]〜\nご予約はDMから\n#宴会 #貸切 #飲み会',
+      line: '【宴会・貸切のご案内】\n忘年会シーズン、ご予約受付中です🍻\n\n人数・ご予算ご相談ください。\nお早めのご検討をおすすめします✨'
+    }
+  },
+  'recruit': {
+    timing: '通年OK、特に2月・9月（転職活動が活発な時期）',
+    bgmMood: '前向きなアコースティック、明るいフォーク',
+    captions: {
+      instagram: 'スタッフ募集🧑‍🍳\n\n[職種] / [雇用形態]\n時給¥[金額]〜\n\nあたたかい仲間と、ここで働きませんか？\n\n📍[店名] / DMでご連絡を。\n#求人 #飲食店求人 #[地域名]求人',
+      tiktok: 'うちの厨房、こんな感じです🍳\n一緒に働く仲間を探してます🤝\n[職種] / 時給¥[金額]〜\n#求人 #飲食店',
+      line: '【スタッフ募集中】\n[店名]では、新しい仲間を募集しています🧑‍🍳\n\n[職種] / 時給¥[金額]〜\n詳しくはDMでお問い合わせください。'
+    }
+  }
+};
+
+// ========== シーン別データ（5パターン） ==========
+const SCENE_DATA = {
+  'food': {
+    lighting: [
+      '窓側の自然光を活かす。窓に対して45度の位置がベスト',
+      '黒いお皿＋逆光で湯気がくっきり映える',
+      '蛍光灯の真下は青白くなるのでNG。窓際を選ぶ'
+    ],
+    smartphone: [
+      '斜め45度が基本。料理に立体感が出る',
+      '真上撮りは平面的に見えるので避ける',
+      'お皿の縁ギリギリまで寄ると迫力アップ'
+    ],
+    tips: [
+      '油やタレが垂れる瞬間を狙うとシズル感が出る',
+      '湯気は逆光＋黒背景で最大限映える',
+      '緑のハーブや赤いソースを「差し色」として配置',
+      '撮る前に料理を5cm手前に動かすと印象が変わる'
+    ],
+    ngExamples: [
+      '真上撮りで料理が平面的に見える',
+      '蛍光灯の真下で青白い色に',
+      '撮影に時間をかけすぎて料理が冷める'
+    ]
+  },
+  'cooking': {
+    lighting: [
+      '厨房の照明＋窓光のミックスがベスト',
+      '火の色を活かすため、白色LEDより電球色がおすすめ',
+      '影が強く出る場合は白い布や紙でレフ板代わりに'
+    ],
+    smartphone: [
+      '手元のアップを意識（顔は映さなくてOK）',
+      '包丁さばきは横から撮るとリズム感が出る',
+      '火を扱うシーンは少し引いて全体感を見せる'
+    ],
+    tips: [
+      '3〜5秒の短いカットを複数撮ってつなぐ',
+      '包丁→盛り付け→完成、の3カットで物語に',
+      '手の動きはゆっくり、丁寧に見えるように',
+      'スマホ保護ケースで油はね対策を忘れずに'
+    ],
+    ngExamples: [
+      '顔を無理に映そうとして不自然に',
+      '油はね対策なしでスマホが汚れる',
+      '撮影に集中しすぎて調理が止まる'
+    ]
+  },
+  'interior': {
+    lighting: [
+      '外観はマジックアワー（日没15〜30分前）が最高',
+      '店内は窓側のテーブルを基準に撮る',
+      '暖簾や看板にスポット光が当たるタイミングを狙う'
+    ],
+    smartphone: [
+      '縦撮り基本。店の縦の広がりを見せる',
+      '入口の正面からまっすぐ撮ると安定感',
+      '店内は入口側から奥に向けて撮ると奥行きが出る'
+    ],
+    tips: [
+      '看板→暖簾→入口→店内の流れで撮ると物語に',
+      '雨の日の夜景も意外と映える',
+      '季節の装飾（桜・紅葉・雪）を意識的に入れる',
+      'お客様の少ない時間に撮影（プライバシー配慮）'
+    ],
+    ngExamples: [
+      '真昼の強い日差しで色が飛ぶ',
+      'お客様が映り込んでしまう',
+      '汚れた窓ガラス越しの撮影'
+    ]
+  },
+  'staff': {
+    lighting: [
+      '顔への直射光は強すぎる。白い紙でレフ板代わりに',
+      '窓を背景にすると逆光になりがち、横からの光を',
+      '電球色の照明だと肌色が温かく自然に写る'
+    ],
+    smartphone: [
+      'カメラ目線より「料理に向き合う表情」が自然',
+      '真剣な眼差し、ふと笑う瞬間が一番いい',
+      'ポートレートモード（被写体ボケ）も効果的'
+    ],
+    tips: [
+      '撮影前に必ず「SNSに出してOK？」と確認',
+      '制服や前掛けがキマっているかチェック',
+      '厨房の動きと一緒に撮ると躍動感が出る',
+      '「カメラ撮るよ」より「いつも通りで」が自然な表情に'
+    ],
+    ngExamples: [
+      '無理に笑わせた不自然な笑顔',
+      '制服がよれている、エプロンが汚れている',
+      '「撮られてる感」が強くて緊張した表情'
+    ]
+  },
+  'customer': {
+    lighting: [
+      'お客様の顔に光が当たりすぎないよう、間接光で',
+      'テーブル上の料理が主役になる光の入り方を意識',
+      'キャンドル等の温かい光があると雰囲気抜群'
+    ],
+    smartphone: [
+      'テーブル俯瞰（手だけ映る角度）が一番安全',
+      '乾杯シーンは下からのアオリで躍動感を',
+      '後ろ姿からのカットも雰囲気が伝わる'
+    ],
+    tips: [
+      '必ず事前に口頭＋紙で許可を取る（最重要）',
+      '顔出しNGの場合はモザイクやスタンプで加工',
+      '子ども連れの撮影は特に慎重に',
+      '「楽しそう」が伝わる手の動きや笑い声を意識'
+    ],
+    ngExamples: [
+      '許可なしの撮影（絶対NG・クレームのもと）',
+      '顔がはっきり映って個人特定できる構図',
+      'お料理中のお客様の邪魔をする'
+    ]
+  }
+};
+
+// ========== ガイドコンテンツ合成関数 ==========
+function getGuideContent(purposeId, sceneId) {
+  return {
+    basics: COMMON.basics,
+    restaurantTips: COMMON.restaurantTips,
+    capcutSteps: COMMON.capcutSteps,
+    timing: PURPOSE_DATA[purposeId].timing,
+    bgmMood: PURPOSE_DATA[purposeId].bgmMood,
+    captions: PURPOSE_DATA[purposeId].captions,
+    lighting: SCENE_DATA[sceneId].lighting,
+    smartphone: SCENE_DATA[sceneId].smartphone,
+    tips: SCENE_DATA[sceneId].tips,
+    ngExamples: SCENE_DATA[sceneId].ngExamples
+  };
+}
+
+// ========== 画面コンポーネント ==========
+
+function TopScreen({ onSelectPurpose }) {
+  return (
+    <div className="min-h-screen fade-in">
+      <div className="relative overflow-hidden text-white py-14 px-6 text-center" style={{background: 'linear-gradient(135deg, #E67E22 0%, #F39C12 50%, #F4D03F 100%)'}}>
+        <div className="absolute inset-0 wood-pattern"></div>
+        <div className="relative z-10 max-w-2xl mx-auto">
+          <div className="text-6xl mb-4">🍳</div>
+          <h1 className="text-3xl md:text-4xl font-bold mb-3 tracking-wide">ココロ・ショート</h1>
+          <div className="inline-block bg-white text-orange-600 px-5 py-1 rounded-full text-sm font-bold mb-5 shadow-md">飲食店版</div>
+          <p className="text-lg md:text-xl mb-2 font-bold">スマホ1台で、おいしさが伝わる動画を。</p>
+          <p className="text-sm opacity-95">撮り方も、編集も、BGMも、迷わない。</p>
+        </div>
+      </div>
+
+      <div className="max-w-3xl mx-auto px-4 py-8">
+        <div className="text-center mb-6">
+          <h2 className="text-xl md:text-2xl font-bold text-stone-800 mb-2">今日は何を投稿したい？</h2>
+          <p className="text-stone-600 text-sm">目的を選ぶと、最適な撮影シーンが見つかります</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {purposes.map(p => (
+            <button key={p.id} onClick={() => onSelectPurpose(p)} className="warm-shadow bg-white rounded-2xl p-5 text-left border-2 border-orange-100 hover:border-orange-400">
+              <div className="flex items-start gap-3">
+                <div className="text-4xl flex-shrink-0">{p.icon}</div>
+                <div className="flex-1">
+                  <div className="font-bold text-lg text-stone-800 mb-1">{p.title}</div>
+                  <div className="text-sm text-orange-600 mb-2 font-bold">{p.subtitle}</div>
+                  <div className="text-xs text-stone-600 leading-relaxed">{p.description}</div>
+                </div>
+                <div className="text-orange-400 text-2xl flex-shrink-0">›</div>
+              </div>
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-10 pt-6 border-t border-orange-200 text-center text-xs text-stone-500">
+          <p className="mb-2">🍽 ココロ・ショート 飲食店版 ver.1.0</p>
+          <p>Smile Plus Consulting</p>
+          <p className="mt-2 text-orange-400">考えるを、ひとりにしない</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function SceneScreen({ purpose, onSelectScene, onBack }) {
+  const recommendedIds = purpose.recommendedScenes;
+  const recommendedScenes = scenes.filter(s => recommendedIds.includes(s.id));
+  const otherScenes = scenes.filter(s => !recommendedIds.includes(s.id));
+
+  return (
+    <div className="min-h-screen fade-in">
+      <div className="text-white py-5 px-4 relative overflow-hidden" style={{background: 'linear-gradient(135deg, #E67E22 0%, #F39C12 100%)'}}>
+        <div className="absolute inset-0 wood-pattern"></div>
+        <div className="max-w-3xl mx-auto relative z-10">
+          <button onClick={onBack} className="text-sm bg-white/25 hover:bg-white/40 px-3 py-1 rounded-full mb-3 transition">← 目的を選び直す</button>
+          <div className="flex items-center gap-3">
+            <div className="text-4xl">{purpose.icon}</div>
+            <div>
+              <div className="text-xs opacity-90">選んだ目的</div>
+              <div className="text-xl font-bold">{purpose.title}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-3xl mx-auto px-4 py-6">
+        <h2 className="text-lg font-bold text-stone-800 mb-4">どんなカットを撮りたい？</h2>
+
+        <div className="mb-6">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-yellow-500 text-lg">⭐</span>
+            <span className="text-sm font-bold text-orange-700">この目的におすすめ</span>
+          </div>
+          <div className="space-y-3">
+            {recommendedScenes.map(s => (
+              <button key={s.id} onClick={() => onSelectScene(s)} className="warm-shadow w-full bg-gradient-to-r from-orange-50 to-amber-50 border-2 border-orange-300 rounded-2xl p-4 text-left hover:border-orange-500">
+                <div className="flex items-center gap-3">
+                  <div className="text-3xl">{s.icon}</div>
+                  <div className="flex-1">
+                    <div className="font-bold text-stone-800">{s.title}</div>
+                    <div className="text-xs text-stone-600 mt-1">{s.description}</div>
+                  </div>
+                  <div className="text-orange-500 text-xl">›</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div className="text-sm font-bold text-stone-500 mb-3">その他のシーンも見る</div>
+          <div className="space-y-3">
+            {otherScenes.map(s => (
+              <button key={s.id} onClick={() => onSelectScene(s)} className="w-full bg-white border border-stone-200 rounded-2xl p-4 text-left hover:border-orange-300 transition">
+                <div className="flex items-center gap-3">
+                  <div className="text-3xl opacity-80">{s.icon}</div>
+                  <div className="flex-1">
+                    <div className="font-bold text-stone-700">{s.title}</div>
+                    <div className="text-xs text-stone-500 mt-1">{s.description}</div>
+                  </div>
+                  <div className="text-stone-300 text-xl">›</div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GuideScreen({ purpose, scene, onBack }) {
+  const guide = getGuideContent(purpose.id, scene.id);
+  const [copiedKey, setCopiedKey] = useState(null);
+
+  const copyText = (text, key) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedKey(key);
+      setTimeout(() => setCopiedKey(null), 2000);
+    });
+  };
+
+  return (
+    <div className="min-h-screen fade-in pb-12">
+      <div className="text-white py-5 px-4 relative overflow-hidden sticky top-0 z-20" style={{background: 'linear-gradient(135deg, #E67E22 0%, #F39C12 100%)'}}>
+        <div className="absolute inset-0 wood-pattern"></div>
+        <div className="max-w-3xl mx-auto relative z-10">
+          <button onClick={onBack} className="text-sm bg-white/25 hover:bg-white/40 px-3 py-1 rounded-full mb-3 transition">← シーンを選び直す</button>
+          <div className="flex items-center gap-2">
+            <div className="text-3xl">{purpose.icon}</div>
+            <div className="text-xl opacity-80">×</div>
+            <div className="text-3xl">{scene.icon}</div>
+          </div>
+          <div className="mt-2 text-sm font-bold">{purpose.title} × {scene.title}</div>
+        </div>
+      </div>
+
+      <div className="max-w-3xl mx-auto px-4 py-6">
+
+        <div className="section-card">
+          <div className="section-title"><span>📐</span><span>撮影の基本</span></div>
+          {guide.basics.map((b, i) => (
+            <div key={i} className="bullet-item"><span className="bullet-mark">▶</span><span>{b}</span></div>
+          ))}
+        </div>
+
+        <div className="section-card">
+          <div className="section-title"><span>💡</span><span>{scene.title}のライティング</span></div>
+          {guide.lighting.map((b, i) => (
+            <div key={i} className="bullet-item"><span className="bullet-mark">▶</span><span>{b}</span></div>
+          ))}
+        </div>
+
+        <div className="section-card">
+          <div className="section-title"><span>📱</span><span>スマホの構え方・角度</span></div>
+          {guide.smartphone.map((b, i) => (
+            <div key={i} className="bullet-item"><span className="bullet-mark">▶</span><span>{b}</span></div>
+          ))}
+        </div>
+
+        <div className="section-card">
+          <div className="section-title"><span>✨</span><span>{scene.title}のコツ</span></div>
+          {guide.tips.map((b, i) => (
+            <div key={i} className="bullet-item"><span className="bullet-mark">▶</span><span>{b}</span></div>
+          ))}
+        </div>
+
+        <div className="section-card" style={{borderLeftColor: '#F4D03F'}}>
+          <div className="section-title" style={{color: '#B7950B'}}><span>🍽</span><span>飲食店ならではのコツ</span></div>
+          {guide.restaurantTips.map((b, i) => (
+            <div key={i} className="bullet-item"><span className="bullet-mark" style={{color: '#F4D03F'}}>▶</span><span>{b}</span></div>
+          ))}
+        </div>
+
+        <div className="section-card" style={{borderLeftColor: '#E74C3C'}}>
+          <div className="section-title" style={{color: '#C0392B'}}><span>⚠</span><span>やりがちなNG例</span></div>
+          {guide.ngExamples.map((b, i) => (
+            <div key={i} className="bullet-item"><span className="bullet-mark" style={{color: '#E74C3C'}}>✗</span><span>{b}</span></div>
+          ))}
+        </div>
+
+        <div className="section-card" style={{borderLeftColor: '#8B4513'}}>
+          <div className="section-title" style={{color: '#8B4513'}}><span>🎬</span><span>CapCut編集の3ステップ</span></div>
+          {guide.capcutSteps.map((s, i) => (
+            <div key={i} className="mb-3 last:mb-0">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="bg-amber-100 text-amber-800 text-xs font-bold px-2 py-0.5 rounded">{s.step}</span>
+                <span className="font-bold text-stone-800 text-sm">{s.title}</span>
+              </div>
+              <div className="text-xs text-stone-600 leading-relaxed pl-1">{s.detail}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="section-card" style={{borderLeftColor: '#9B59B6'}}>
+          <div className="section-title" style={{color: '#7D3C98'}}><span>📅</span><span>投稿のベストタイミング</span></div>
+          <div className="text-sm leading-relaxed text-stone-700">{guide.timing}</div>
+        </div>
+
+        <div className="section-card" style={{borderLeftColor: '#16A085'}}>
+          <div className="section-title" style={{color: '#117864'}}><span>🎵</span><span>BGMの雰囲気</span></div>
+          <div className="text-sm leading-relaxed text-stone-700 mb-2">{guide.bgmMood}</div>
+          <div className="text-xs text-stone-500 leading-relaxed">※CapCutの無料BGMから雰囲気の合うものを選びましょう</div>
+        </div>
+
+        <div className="section-card" style={{borderLeftColor: '#3498DB'}}>
+          <div className="section-title" style={{color: '#1F618D'}}><span>📝</span><span>投稿キャプション例</span></div>
+
+          <div className="mt-2">
+            <div className="text-xs font-bold text-pink-700 mb-1">📷 Instagram用</div>
+            <div className="caption-box">{guide.captions.instagram}</div>
+            <button onClick={() => copyText(guide.captions.instagram, 'ig')} className={`copy-btn ${copiedKey === 'ig' ? 'copied' : ''}`}>
+              {copiedKey === 'ig' ? '✓ コピーしました' : '📋 コピーする'}
+            </button>
+          </div>
+
+          <div className="mt-4">
+            <div className="text-xs font-bold text-stone-700 mb-1">🎵 TikTok用</div>
+            <div className="caption-box">{guide.captions.tiktok}</div>
+            <button onClick={() => copyText(guide.captions.tiktok, 'tt')} className={`copy-btn ${copiedKey === 'tt' ? 'copied' : ''}`}>
+              {copiedKey === 'tt' ? '✓ コピーしました' : '📋 コピーする'}
+            </button>
+          </div>
+
+          <div className="mt-4">
+            <div className="text-xs font-bold text-green-700 mb-1">💬 LINE公式用</div>
+            <div className="caption-box">{guide.captions.line}</div>
+            <button onClick={() => copyText(guide.captions.line, 'ln')} className={`copy-btn ${copiedKey === 'ln' ? 'copied' : ''}`}>
+              {copiedKey === 'ln' ? '✓ コピーしました' : '📋 コピーする'}
+            </button>
+          </div>
+
+          <div className="mt-4 text-xs text-stone-500 leading-relaxed bg-amber-50 p-3 rounded-lg">
+            💡 [料理名][価格][店名]などの[ ]部分を、お店の情報に書き換えてお使いください
+          </div>
+        </div>
+
+        <div className="text-center mt-8">
+          <button onClick={onBack} className="bg-white border-2 border-orange-300 text-orange-700 font-bold px-6 py-2 rounded-full hover:bg-orange-50 transition">
+            別のシーンも見る
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [screen, setScreen] = useState('top');
+  const [selectedPurpose, setSelectedPurpose] = useState(null);
+  const [selectedScene, setSelectedScene] = useState(null);
+
+  const handleSelectPurpose = (p) => {
+    setSelectedPurpose(p);
+    setScreen('scene');
+    window.scrollTo(0, 0);
+  };
+
+  const handleSelectScene = (s) => {
+    setSelectedScene(s);
+    setScreen('guide');
+    window.scrollTo(0, 0);
+  };
+
+  const handleBackToTop = () => { setScreen('top'); window.scrollTo(0, 0); };
+  const handleBackToScene = () => { setScreen('scene'); window.scrollTo(0, 0); };
+
+  if (screen === 'top') return <TopScreen onSelectPurpose={handleSelectPurpose} />;
+  if (screen === 'scene') return <SceneScreen purpose={selectedPurpose} onSelectScene={handleSelectScene} onBack={handleBackToTop} />;
+  if (screen === 'guide') return <GuideScreen purpose={selectedPurpose} scene={selectedScene} onBack={handleBackToScene} />;
+  return null;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
