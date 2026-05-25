@@ -89,12 +89,189 @@
     font-weight: bold;
     border: 1px solid #F4D03F;
   }
+  .section-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(230, 126, 34, 0.08);
+    border-left: 4px solid #E67E22;
+  }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: bold;
+    color: #C0651A;
+    margin-bottom: 0.75rem;
+    font-size: 1.05rem;
+  }
+  .bullet-item {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: #4A3528;
+  }
+  .bullet-mark {
+    color: #E67E22;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+  .caption-box {
+    background: #FFF8E7;
+    border-radius: 0.75rem;
+    padding: 0.875rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.88rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    border: 1px solid #F4D03F;
+  }
+  .copy-btn {
+    background: #E67E22;
+    color: white;
+    padding: 0.4rem 0.9rem;
+    border-radius: 9999px;
+    font-size: 0.78rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover { background: #D35400; }
+  .copy-btn.copied { background: #27AE60; }
+  .camera-btn-big {
+    background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+    color: white;
+    padding: 1.25rem 2rem;
+    border-radius: 9999px;
+    font-size: 1.15rem;
+    font-weight: bold;
+    width: 100%;
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.35);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .camera-btn-big:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(231, 76, 60, 0.5); }
+  .camera-btn-big:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: #FFF8E7;
+    border-radius: 0.625rem;
+    margin-bottom: 0.5rem;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .checklist-item.checked { background: #FEF5E7; border-color: #F4D03F; }
+  .checklist-checkbox {
+    width: 28px; height: 28px; border: 2px solid #E67E22; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold; color: white; flex-shrink: 0; background: white;
+    transition: all 0.2s;
+  }
+  .checklist-item.checked .checklist-checkbox { background: #27AE60; border-color: #27AE60; }
+  .checklist-text { flex: 1; font-size: 0.95rem; color: #4A3528; }
+  .modal-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5); z-index: 50;
+    display: flex; align-items: flex-end; justify-content: center;
+    animation: fadeIn 0.2s ease-out;
+  }
+  .modal-content {
+    background: white; width: 100%; max-width: 480px;
+    border-radius: 1.5rem 1.5rem 0 0; padding: 1.5rem;
+    max-height: 85vh; overflow-y: auto;
+    animation: slideUp 0.3s ease-out;
+  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  .progress-bar-container {
+    display: flex; gap: 0.3rem; margin-top: 0.75rem;
+  }
+  .progress-dot {
+    flex: 1; height: 8px; border-radius: 9999px;
+    background: rgba(255,255,255,0.25);
+    transition: all 0.3s;
+  }
+  .progress-dot.completed { background: #27AE60; }
+  .progress-dot.current { background: white; box-shadow: 0 0 8px rgba(255,255,255,0.7); }
+  .cut-info-box {
+    background: linear-gradient(135deg, #FFF8E7 0%, #FEF5E7 100%);
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    border: 2px solid #F4D03F;
+    text-align: center;
+  }
+  .cut-info-number {
+    display: inline-block;
+    background: linear-gradient(135deg, #E67E22 0%, #F39C12 100%);
+    color: white;
+    padding: 0.4rem 1rem;
+    border-radius: 9999px;
+    font-weight: bold;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+  }
+  .cut-info-instruction {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #3D2817;
+    line-height: 1.5;
+    margin: 0.5rem 0;
+  }
+  .recorded-video-row {
+    background: white;
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: 1px solid #F4D03F;
+  }
+  .recorded-video-thumb {
+    width: 80px;
+    height: 80px;
+    background: black;
+    border-radius: 0.5rem;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+  .celebration-burst {
+    animation: burst 0.8s ease-out;
+  }
+  @keyframes burst {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .step-num-box {
+    background: #E67E22;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.78rem;
+    flex-shrink: 0;
+  }
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
-const { useState } = React;
+const { useState, useRef, useEffect } = React;
 
 // ========== 基本データ ==========
 const purposes = [
@@ -112,6 +289,92 @@ const sceneInfo = {
   'food': { icon: '📷', label: '料理撮影' },
   'staff': { icon: '😊', label: 'スタッフ' },
   'customer': { icon: '🥂', label: 'お客様' }
+};
+
+// ========== シーン別ガイドデータ ==========
+const SCENE_DATA = {
+  'food': {
+    lighting: ['窓側の自然光を活かす。窓に対して45度の位置がベスト', '黒いお皿＋逆光で湯気がくっきり映える'],
+    smartphone: ['斜め45度が基本。料理に立体感が出る', 'お皿の縁ギリギリまで寄ると迫力アップ'],
+    tips: ['油やタレが垂れる瞬間を狙う', '湯気は逆光＋黒背景で最大限映える', '緑のハーブや赤いソースを「差し色」に'],
+    checklist: ['お皿の位置は中央に整えた？', '光は窓側から入っている？', 'スマホは斜め45度の角度？', 'お皿の縁ギリギリまで寄った？']
+  },
+  'cooking': {
+    lighting: ['厨房の照明＋窓光のミックスがベスト', '火の色を活かすため、電球色がおすすめ'],
+    smartphone: ['手元のアップを意識（顔は映さなくてOK）', '包丁さばきは横から撮るとリズム感が出る'],
+    tips: ['3〜5秒の短いカットを撮ってつなぐ', '手の動きはゆっくり、丁寧に', 'スマホ保護ケースで油はね対策を'],
+    checklist: ['手元のアップになる位置？', 'スマホに保護ケースをつけた？', '5秒で1カット撮れる準備OK？', '油はねやコゲ対策は大丈夫？']
+  },
+  'interior': {
+    lighting: ['外観はマジックアワー（日没15〜30分前）が最高', '店内は窓側のテーブルを基準に撮る'],
+    smartphone: ['縦撮り基本。店の縦の広がりを見せる', '入口の正面からまっすぐ撮ると安定感'],
+    tips: ['看板→暖簾→入口→店内の流れで物語に', '雨の日の夜景も意外と映える', '季節の装飾（桜・紅葉・雪）を意識的に'],
+    checklist: ['スマホは縦持ちにした？', '入口の正面から撮れる位置？', 'お客様が映り込まない時間帯？', '看板や暖簾がキレイに見える？']
+  },
+  'staff': {
+    lighting: ['顔への直射光は強すぎる。白い紙でレフ板代わりに', '電球色の照明だと肌色が温かく自然に'],
+    smartphone: ['カメラ目線より「料理に向き合う表情」が自然', '真剣な眼差し、ふと笑う瞬間が一番いい'],
+    tips: ['撮影前に必ず「SNSに出してOK？」と確認', '制服や前掛けがキマっているかチェック', '「いつも通りで」が自然な表情に'],
+    checklist: ['SNS掲載OKの確認、もらった？', '制服や前掛けはキマってる？', '顔に直射光が当たっていない？', '自然な表情で動いてもらってる？']
+  },
+  'customer': {
+    lighting: ['お客様の顔に光が当たりすぎないよう、間接光で', 'テーブル上の料理が主役になる光の入り方を'],
+    smartphone: ['テーブル俯瞰（手だけ映る角度）が一番安全', '乾杯シーンは下からのアオリで躍動感を'],
+    tips: ['必ず事前に口頭＋紙で許可を取る（最重要）', '顔出しNGの場合はモザイクやスタンプ加工', '子ども連れの撮影は特に慎重に'],
+    checklist: ['事前許可、必ず取った？（最重要）', '顔が映らない角度を選んだ？', 'お料理中の邪魔をしていない？', '楽しそうな雰囲気が伝わる構図？']
+  }
+};
+
+// ========== 目的別データ（完了画面のキャプション用） ==========
+const PURPOSE_DATA = {
+  'new-menu': {
+    bgmMood: '軽快なボサノバ、ジャズ風のアコースティック',
+    captions: {
+      instagram: '【新メニュー登場🍽】\n[料理名] ¥[価格]\n\nひと口で笑顔になる、新しい定番が生まれました。\nぜひお試しください。\n\n📍[店名]\n#新メニュー #[地域名]グルメ #飯テロ',
+      tiktok: '新メニュー入りました🔥\n[料理名] ¥[価格]\nこの湯気、伝わりますか？\n#新メニュー #飯テロ #グルメ',
+      line: '【新メニューのお知らせ】\nいつもありがとうございます🍽\n本日より「[料理名]」が新登場です。\n\n¥[価格]\nぜひ味わいに来てくださいね✨'
+    }
+  },
+  'lunch': {
+    bgmMood: '明るいウクレレ、爽やかなアコースティック',
+    captions: {
+      instagram: '本日のランチ☀\n[メニュー名] ¥[価格]\n\nサクッと美味しい、お昼の時間🍽\n11:30 OPEN、お待ちしております。\n\n📍[店名]\n#ランチ #[地域名]ランチ',
+      tiktok: '今日のランチ何にしよ🤔\nあったかいうちにどうぞ☀\n¥[価格] / 11:30〜\n#ランチ #飯テロ',
+      line: '【本日のランチ】\nおはようございます☀\n本日のおすすめは「[メニュー名]」¥[価格]です。\n\n11:30からお待ちしております🍽'
+    }
+  },
+  'dinner': {
+    bgmMood: 'しっとりピアノ、上質なローファイ',
+    captions: {
+      instagram: '夜の[店名]🍷\n\n大切な人と過ごす、特別な時間を。\nコース ¥[価格]〜 / ご予約承ります。\n\n📍[住所]\n#ディナー #記念日',
+      tiktok: '今夜どこ行く？🌙\n大人の隠れ家、見つけました。\n[店名] / ご予約はプロフから\n#ディナー #デート',
+      line: '【ディナー予約受付中】\n今週末、まだお席に余裕がございます🌙\nご予約はLINEからもどうぞ。\n\nスタッフ一同お待ちしております✨'
+    }
+  },
+  'takeout': {
+    bgmMood: 'ポップなインストゥルメンタル、明るいエレクトロニカ',
+    captions: {
+      instagram: 'テイクアウト始めました🥡\n\n[メニュー名] ¥[価格]\nおうちで、お店の味を。\n\n📍[店名] / TEL[番号]\n#テイクアウト #おうちごはん',
+      tiktok: 'テイクアウトの中身、開けてみた👀\nおうちで本格[料理ジャンル]🥡\n¥[価格] / [店名]\n#テイクアウト #飯テロ',
+      line: '【テイクアウトのご案内】\nおうちでも、お店の味をお楽しみください🥡\n\n「[メニュー名]」¥[価格]\nご注文はお電話で承ります☎'
+    }
+  },
+  'party': {
+    bgmMood: '楽しげなブラスバンド、賑やかなジャズ',
+    captions: {
+      instagram: '宴会承ります🍻\n\n[人数]名様まで貸切OK\n飲み放題付きコース ¥[価格]〜\n\n📍[店名] / お早めにご予約を。\n#宴会 #忘年会 #貸切',
+      tiktok: '会社の宴会、ここで決まり🍻\n[人数]名OK / 飲み放題付き¥[価格]〜\nご予約はDMから\n#宴会 #貸切',
+      line: '【宴会・貸切のご案内】\n忘年会シーズン、ご予約受付中です🍻\n\n人数・ご予算ご相談ください。\nお早めのご検討をおすすめします✨'
+    }
+  },
+  'recruit': {
+    bgmMood: '前向きなアコースティック、明るいフォーク',
+    captions: {
+      instagram: 'スタッフ募集🧑‍🍳\n\n[職種] / [雇用形態]\n時給¥[金額]〜\n\nあたたかい仲間と、ここで働きませんか？\n\n📍[店名] / DMでご連絡を。\n#求人 #飲食店求人',
+      tiktok: 'うちの厨房、こんな感じです🍳\n一緒に働く仲間を探してます🤝\n[職種] / 時給¥[金額]〜\n#求人 #飲食店',
+      line: '【スタッフ募集中】\n[店名]では、新しい仲間を募集しています🧑‍🍳\n\n[職種] / 時給¥[金額]〜\n詳しくはDMでお問い合わせください。'
+    }
+  }
 };
 
 // ========== カット台本データ（18パターン） ==========
@@ -262,41 +525,84 @@ const CUT_TEMPLATES = {
   }
 };
 
-// ========== 動画長メタ情報 ==========
 const VIDEO_LENGTHS = [
-  {
-    seconds: 15,
-    cuts: 3,
-    title: '15秒',
-    subtitle: '軽快・テンポ重視',
-    description: '5秒×3カットの3幕構成。最も拡散されやすい長さ。',
-    bestFor: ['Instagram リール', 'TikTok', 'X 動画投稿'],
-    difficulty: '★☆☆ 初心者向け',
-    color: '#F39C12'
-  },
-  {
-    seconds: 30,
-    cuts: 5,
-    title: '30秒',
-    subtitle: 'バランス型・標準',
-    description: '6秒×5カット。情報量と見やすさのベストバランス。',
-    bestFor: ['YouTube Shorts', 'Instagramリール', 'LINE VOOM'],
-    difficulty: '★★☆ 標準的',
-    color: '#E67E22'
-  },
-  {
-    seconds: 60,
-    cuts: 8,
-    title: '60秒',
-    subtitle: 'じっくり魅せる',
-    description: '7〜8秒×8カット。ストーリー性のあるじっくり訴求向け。',
-    bestFor: ['採用動画', '高単価メニュー紹介', '記念動画'],
-    difficulty: '★★★ こだわり派',
-    color: '#D35400'
-  }
+  { seconds: 15, cuts: 3, title: '15秒', subtitle: '軽快・テンポ重視', description: '5秒×3カットの3幕構成。最も拡散されやすい長さ。', bestFor: ['Instagram リール', 'TikTok', 'X 動画投稿'], difficulty: '★☆☆ 初心者向け', color: '#F39C12' },
+  { seconds: 30, cuts: 5, title: '30秒', subtitle: 'バランス型・標準', description: '6秒×5カット。情報量と見やすさのベストバランス。', bestFor: ['YouTube Shorts', 'Instagramリール', 'LINE VOOM'], difficulty: '★★☆ 標準的', color: '#E67E22' },
+  { seconds: 60, cuts: 8, title: '60秒', subtitle: 'じっくり魅せる', description: '7〜8秒×8カット。ストーリー性のあるじっくり訴求向け。', bestFor: ['採用動画', '高単価メニュー紹介', '記念動画'], difficulty: '★★★ こだわり派', color: '#D35400' }
 ];
 
-// ========== トップ画面（目的選択） ==========
+// ========== チェックリストモーダル ==========
+function ChecklistModal({ scene, cut, checklistItems, onClose, onShoot }) {
+  const [checkedItems, setCheckedItems] = useState([]);
+  const toggleCheck = (i) => setCheckedItems(prev => prev.includes(i) ? prev.filter(x => x !== i) : [...prev, i]);
+  const allChecked = checkedItems.length === checklistItems.length;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={e => e.stopPropagation()}>
+        <div className="text-center mb-4">
+          <div className="text-4xl mb-2">{sceneInfo[scene].icon}</div>
+          <div className="text-xs font-bold text-orange-600 mb-1">CUT {cut.cutNo}</div>
+          <h3 className="text-lg font-bold text-stone-800">撮影前チェック</h3>
+          <p className="text-xs text-stone-500 mt-1">{cut.instruction}</p>
+        </div>
+
+        <div className="mb-5">
+          {checklistItems.map((item, i) => (
+            <div key={i} className={`checklist-item ${checkedItems.includes(i) ? 'checked' : ''}`} onClick={() => toggleCheck(i)}>
+              <div className="checklist-checkbox">{checkedItems.includes(i) ? '✓' : ''}</div>
+              <div className="checklist-text">{item}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="text-center text-xs text-stone-500 mb-3">{checkedItems.length} / {checklistItems.length} 項目確認済み</div>
+
+        <button onClick={onShoot} disabled={!allChecked} className="camera-btn-big">
+          <span>📹</span>
+          <span>{allChecked ? '準備OK！撮影する' : '全項目チェックしてください'}</span>
+        </button>
+
+        <button onClick={onClose} className="w-full mt-3 text-sm text-stone-500 py-2 hover:text-stone-700">あとで撮る</button>
+      </div>
+    </div>
+  );
+}
+
+// ========== プレビューモーダル ==========
+function PreviewModal({ videoUrl, cut, totalCuts, onRetake, onDone }) {
+  const isLastCut = cut.cutNo === totalCuts;
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <div className="text-center mb-4">
+          <div className="text-4xl mb-2">🎬</div>
+          <div className="text-xs font-bold text-orange-600 mb-1">CUT {cut.cutNo} / {totalCuts}</div>
+          <h3 className="text-lg font-bold text-stone-800">撮影できました！</h3>
+          <p className="text-xs text-stone-500 mt-1">確認してみましょう</p>
+        </div>
+
+        <video src={videoUrl} controls className="w-full rounded-xl mb-4 bg-black" style={{maxHeight: '50vh'}} />
+
+        <div className="bg-amber-50 rounded-xl p-3 mb-4 text-xs text-stone-700 leading-relaxed">
+          💡 チェックポイント<br/>
+          ・手ブレしてない？<br/>
+          ・指示通りに撮れた？<br/>
+          ・余計な音は入ってない？
+        </div>
+
+        <button onClick={onDone} className="camera-btn-big mb-2" style={{background: 'linear-gradient(135deg, #27AE60 0%, #1E8449 100%)', boxShadow: '0 6px 20px rgba(39, 174, 96, 0.35)'}}>
+          <span>{isLastCut ? '🎉' : '✨'}</span>
+          <span>{isLastCut ? 'すべて完了！結果を見る' : 'いい感じ！次のカットへ'}</span>
+        </button>
+
+        <button onClick={onRetake} className="w-full text-sm bg-white border-2 border-orange-300 text-orange-700 font-bold py-3 rounded-full hover:bg-orange-50 transition">🔄 もう一度撮り直す</button>
+      </div>
+    </div>
+  );
+}
+
+// ========== トップ画面 ==========
 function TopScreen({ onSelectPurpose }) {
   return (
     <div className="min-h-screen fade-in">
@@ -335,7 +641,7 @@ function TopScreen({ onSelectPurpose }) {
         </div>
 
         <div className="mt-10 pt-6 border-t border-orange-200 text-center text-xs text-stone-500">
-          <p className="mb-2">🍽 ココロ・ショート 飲食店版 ver.1.2</p>
+          <p className="mb-2">🍽 ココロ・ショート 飲食店版 ver.1.3</p>
           <p>Smile Plus Consulting</p>
           <p className="mt-2 text-orange-400">考えるを、ひとりにしない</p>
         </div>
@@ -344,7 +650,7 @@ function TopScreen({ onSelectPurpose }) {
   );
 }
 
-// ========== 動画長選択画面（新規） ==========
+// ========== 動画長選択画面 ==========
 function VideoLengthScreen({ purpose, onSelectLength, onBack }) {
   return (
     <div className="min-h-screen fade-in pb-12">
@@ -380,9 +686,7 @@ function VideoLengthScreen({ purpose, onSelectLength, onBack }) {
                 <div className="font-bold text-stone-800 mb-1">{vl.subtitle}</div>
                 <div className="text-xs text-stone-600 mb-2 leading-relaxed">{vl.description}</div>
                 <div className="flex flex-wrap gap-1 mb-2">
-                  {vl.bestFor.map((bf, i) => (
-                    <span key={i} className="scene-tag">{bf}</span>
-                  ))}
+                  {vl.bestFor.map((bf, i) => <span key={i} className="scene-tag">{bf}</span>)}
                 </div>
                 <div className="text-xs font-bold" style={{color: vl.color}}>{vl.difficulty}</div>
               </div>
@@ -400,7 +704,7 @@ function VideoLengthScreen({ purpose, onSelectLength, onBack }) {
   );
 }
 
-// ========== カット一覧画面（仮実装・STEP D で撮影機能を追加） ==========
+// ========== カット一覧画面 ==========
 function CutListScreen({ purpose, videoLength, onBack, onStartShoot }) {
   const template = CUT_TEMPLATES[purpose.id][videoLength.seconds];
   const totalSeconds = template.cuts.reduce((sum, c) => sum + c.duration, 0);
@@ -446,27 +750,19 @@ function CutListScreen({ purpose, videoLength, onBack, onStartShoot }) {
           ))}
         </div>
 
-        <div className="bg-amber-50 border-2 border-dashed border-orange-300 rounded-2xl p-5 text-center mb-4">
-          <div className="text-4xl mb-2">🚧</div>
-          <div className="font-bold text-stone-800 mb-2">連続撮影機能を準備中</div>
-          <div className="text-xs text-stone-600 leading-relaxed mb-3">
-            次のアップデート（STEP D）で、<br/>
-            1カットずつガイド付きで撮影する機能を実装します。
-          </div>
-          <button onClick={onStartShoot} className="bg-stone-300 text-stone-500 font-bold px-6 py-2.5 rounded-full text-sm cursor-not-allowed" disabled>
-            📹 連続撮影を始める（準備中）
+        <div className="bg-white rounded-2xl p-5 shadow-md border border-orange-200 mb-4">
+          <p className="text-sm text-stone-700 mb-4 leading-relaxed text-center">
+            台本の流れがイメージできたら、<br/>
+            1カットずつガイド付きで撮影しましょう！
+          </p>
+          <button onClick={onStartShoot} className="camera-btn-big">
+            <span>📹</span>
+            <span>連続撮影を始める</span>
           </button>
-        </div>
-
-        <div className="bg-white border border-orange-200 rounded-2xl p-4 text-xs text-stone-700 leading-relaxed">
-          <div className="font-bold text-orange-700 mb-2">📋 STEP D で実装予定の機能</div>
-          <div className="space-y-1">
-            <div>▶ カット1から順番に撮影</div>
-            <div>▶ 各カットごとに該当シーンのガイド表示</div>
-            <div>▶ 撮影前のチェックリスト確認</div>
-            <div>▶ 撮影後のプレビュー＆OK判定</div>
-            <div>▶ 進捗バー（カット 1/{template.cuts.length} → {template.cuts.length}/{template.cuts.length}）</div>
-          </div>
+          <p className="text-xs text-stone-500 mt-3 text-center leading-relaxed">
+            ※スマホの標準カメラが起動します<br/>
+            撮影した動画は端末に自動保存されます
+          </p>
         </div>
 
         <div className="text-center mt-6">
@@ -479,31 +775,313 @@ function CutListScreen({ purpose, videoLength, onBack, onStartShoot }) {
   );
 }
 
+// ========== 連続撮影画面 ==========
+function ShootingScreen({ purpose, videoLength, onComplete, onBack }) {
+  const template = CUT_TEMPLATES[purpose.id][videoLength.seconds];
+  const totalCuts = template.cuts.length;
+  const [currentCutIndex, setCurrentCutIndex] = useState(0);
+  const [recordedVideos, setRecordedVideos] = useState([]);
+  const [showChecklist, setShowChecklist] = useState(false);
+  const [previewVideoUrl, setPreviewVideoUrl] = useState(null);
+  const fileInputRef = useRef(null);
+
+  const currentCut = template.cuts[currentCutIndex];
+  const sceneData = SCENE_DATA[currentCut.sceneId];
+
+  const handleStartShoot = () => setShowChecklist(true);
+
+  const handleConfirmShoot = () => {
+    setShowChecklist(false);
+    setTimeout(() => fileInputRef.current?.click(), 200);
+  };
+
+  const handleCapture = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setPreviewVideoUrl(url);
+    }
+    e.target.value = '';
+  };
+
+  const handleAcceptVideo = () => {
+    const newVideos = [...recordedVideos, { cutNo: currentCut.cutNo, url: previewVideoUrl, cut: currentCut }];
+    setPreviewVideoUrl(null);
+
+    if (currentCutIndex === totalCuts - 1) {
+      onComplete(newVideos);
+    } else {
+      setRecordedVideos(newVideos);
+      setCurrentCutIndex(currentCutIndex + 1);
+      window.scrollTo(0, 0);
+    }
+  };
+
+  const handleRetake = () => {
+    if (previewVideoUrl) URL.revokeObjectURL(previewVideoUrl);
+    setPreviewVideoUrl(null);
+    setTimeout(() => fileInputRef.current?.click(), 200);
+  };
+
+  return (
+    <div className="min-h-screen fade-in pb-12">
+      <div className="text-white py-5 px-4 relative overflow-hidden sticky top-0 z-20" style={{background: 'linear-gradient(135deg, #E67E22 0%, #F39C12 100%)'}}>
+        <div className="absolute inset-0 wood-pattern"></div>
+        <div className="max-w-3xl mx-auto relative z-10">
+          <button onClick={onBack} className="text-sm bg-white/25 hover:bg-white/40 px-3 py-1 rounded-full mb-2 transition">← カット台本に戻る</button>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-xs opacity-90">{purpose.title} / {videoLength.title}</div>
+              <div className="text-lg font-bold">撮影中：カット {currentCut.cutNo} / {totalCuts}</div>
+            </div>
+            <div className="text-3xl">{purpose.icon}</div>
+          </div>
+          <div className="progress-bar-container">
+            {template.cuts.map((_, i) => (
+              <div key={i} className={`progress-dot ${i < currentCutIndex ? 'completed' : i === currentCutIndex ? 'current' : ''}`} />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-3xl mx-auto px-4 py-6">
+
+        <div className="cut-info-box fade-in" key={currentCutIndex}>
+          <div className="cut-info-number">CUT {currentCut.cutNo} / {totalCuts}</div>
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <span className="scene-tag">{sceneInfo[currentCut.sceneId].icon} {sceneInfo[currentCut.sceneId].label}</span>
+            <span className="text-xs text-stone-500">⏱ {currentCut.duration}秒</span>
+          </div>
+          <div className="cut-info-instruction">{currentCut.instruction}</div>
+        </div>
+
+        <div className="section-card">
+          <div className="section-title"><span>💡</span><span>ライティング</span></div>
+          {sceneData.lighting.map((b, i) => (<div key={i} className="bullet-item"><span className="bullet-mark">▶</span><span>{b}</span></div>))}
+        </div>
+
+        <div className="section-card">
+          <div className="section-title"><span>📱</span><span>スマホの構え方</span></div>
+          {sceneData.smartphone.map((b, i) => (<div key={i} className="bullet-item"><span className="bullet-mark">▶</span><span>{b}</span></div>))}
+        </div>
+
+        <div className="section-card">
+          <div className="section-title"><span>✨</span><span>撮影のコツ</span></div>
+          {sceneData.tips.map((b, i) => (<div key={i} className="bullet-item"><span className="bullet-mark">▶</span><span>{b}</span></div>))}
+        </div>
+
+        <div className="section-card" style={{borderLeftColor: '#E74C3C', background: 'linear-gradient(135deg, #FFF8E7 0%, #FEF5E7 100%)'}}>
+          <div className="section-title" style={{color: '#C0392B'}}><span>📹</span><span>このカットを撮影する</span></div>
+          <p className="text-sm text-stone-700 mb-4 leading-relaxed">
+            準備ができたら、撮影スタートボタンを押してください。<br/>
+            チェックリストで最終確認してからカメラが起動します。
+          </p>
+          <button onClick={handleStartShoot} className="camera-btn-big">
+            <span>📹</span>
+            <span>CUT {currentCut.cutNo} を撮影する</span>
+          </button>
+        </div>
+
+        {recordedVideos.length > 0 && (
+          <div className="section-card" style={{borderLeftColor: '#27AE60'}}>
+            <div className="section-title" style={{color: '#1E8449'}}><span>✅</span><span>撮影済み（{recordedVideos.length}本）</span></div>
+            {recordedVideos.map(rv => (
+              <div key={rv.cutNo} className="recorded-video-row">
+                <video src={rv.url} className="recorded-video-thumb" muted />
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-bold text-green-700">CUT {rv.cutNo} 撮影完了</div>
+                  <div className="text-xs text-stone-600 truncate">{rv.cut.instruction}</div>
+                </div>
+                <div className="text-green-500 text-xl flex-shrink-0">✓</div>
+              </div>
+            ))}
+          </div>
+        )}
+
+      </div>
+
+      <input ref={fileInputRef} type="file" accept="video/*" capture="environment" onChange={handleCapture} style={{display: 'none'}} />
+
+      {showChecklist && (
+        <ChecklistModal scene={currentCut.sceneId} cut={currentCut} checklistItems={sceneData.checklist} onClose={() => setShowChecklist(false)} onShoot={handleConfirmShoot} />
+      )}
+
+      {previewVideoUrl && (
+        <PreviewModal videoUrl={previewVideoUrl} cut={currentCut} totalCuts={totalCuts} onRetake={handleRetake} onDone={handleAcceptVideo} />
+      )}
+    </div>
+  );
+}
+
+// ========== 完了画面 ==========
+function CompletionScreen({ purpose, videoLength, recordedVideos, onBackToTop }) {
+  const template = CUT_TEMPLATES[purpose.id][videoLength.seconds];
+  const purposeData = PURPOSE_DATA[purpose.id];
+  const totalSeconds = template.cuts.reduce((sum, c) => sum + c.duration, 0);
+  const [copiedKey, setCopiedKey] = useState(null);
+
+  const copyText = (text, key) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedKey(key);
+      setTimeout(() => setCopiedKey(null), 2000);
+    });
+  };
+
+  const openCapCut = () => {
+    window.location.href = 'capcut://';
+  };
+
+  return (
+    <div className="min-h-screen fade-in pb-12">
+      <div className="text-white py-10 px-4 relative overflow-hidden text-center" style={{background: 'linear-gradient(135deg, #27AE60 0%, #1E8449 100%)'}}>
+        <div className="absolute inset-0 wood-pattern"></div>
+        <div className="relative z-10 max-w-2xl mx-auto">
+          <div className="text-6xl mb-3 celebration-burst">🎉</div>
+          <h1 className="text-2xl md:text-3xl font-bold mb-2">お疲れさまでした！</h1>
+          <p className="text-sm opacity-95 mb-3">{recordedVideos.length}カット、すべて撮影完了です</p>
+          <div className="inline-block bg-white text-green-700 px-4 py-1 rounded-full text-xs font-bold">
+            {purpose.title} / {videoLength.title}版（合計{totalSeconds}秒）
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-3xl mx-auto px-4 py-6">
+
+        <div className="section-card" style={{borderLeftColor: '#27AE60'}}>
+          <div className="section-title" style={{color: '#1E8449'}}><span>📹</span><span>撮影した動画（{recordedVideos.length}本）</span></div>
+          <p className="text-xs text-stone-600 mb-3 leading-relaxed">
+            動画は端末のカメラロール（写真アプリ）に自動保存されています。<br/>
+            下のプレビューで確認できます。
+          </p>
+          {recordedVideos.map(rv => (
+            <div key={rv.cutNo} className="recorded-video-row">
+              <video src={rv.url} className="recorded-video-thumb" controls />
+              <div className="flex-1 min-w-0">
+                <div className="text-xs font-bold text-green-700 mb-1">CUT {rv.cutNo} ✓</div>
+                <div className="text-xs text-stone-600 leading-snug">{rv.cut.instruction}</div>
+                <div className="text-xs text-stone-400 mt-1">⏱ {rv.cut.duration}秒</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="section-card" style={{borderLeftColor: '#8B4513'}}>
+          <div className="section-title" style={{color: '#8B4513'}}><span>🎬</span><span>CapCutで仕上げよう</span></div>
+          <p className="text-sm text-stone-700 mb-4 leading-relaxed">
+            撮影した{recordedVideos.length}本の動画を、CapCutで1つの動画に編集します。
+          </p>
+
+          <div className="space-y-2.5 mb-4">
+            <div className="flex items-start gap-2.5">
+              <div className="step-num-box">1</div>
+              <div className="text-sm text-stone-700 leading-relaxed flex-1">CapCutアプリを開いて「+ 新しいプロジェクト」をタップ</div>
+            </div>
+            <div className="flex items-start gap-2.5">
+              <div className="step-num-box">2</div>
+              <div className="text-sm text-stone-700 leading-relaxed flex-1">カメラロールから今撮った{recordedVideos.length}本の動画を順番に選択</div>
+            </div>
+            <div className="flex items-start gap-2.5">
+              <div className="step-num-box">3</div>
+              <div className="text-sm text-stone-700 leading-relaxed flex-1">CUT 1 → CUT {recordedVideos.length} の順番になっているか確認</div>
+            </div>
+            <div className="flex items-start gap-2.5">
+              <div className="step-num-box">4</div>
+              <div className="text-sm text-stone-700 leading-relaxed flex-1">「オーディオ」→「サウンド」から雰囲気に合うBGMを追加<br/><span className="text-xs text-stone-500">おすすめ：{purposeData.bgmMood}</span></div>
+            </div>
+            <div className="flex items-start gap-2.5">
+              <div className="step-num-box">5</div>
+              <div className="text-sm text-stone-700 leading-relaxed flex-1">「テキスト」で料理名・価格・店名を追加（大きめのフォントで）</div>
+            </div>
+            <div className="flex items-start gap-2.5">
+              <div className="step-num-box">6</div>
+              <div className="text-sm text-stone-700 leading-relaxed flex-1">右上の「書き出し」→ カメラロールに保存 → SNSへ投稿！</div>
+            </div>
+          </div>
+
+          <button onClick={openCapCut} className="camera-btn-big" style={{background: 'linear-gradient(135deg, #2C2C2E 0%, #1C1C1E 100%)', boxShadow: '0 6px 20px rgba(0, 0, 0, 0.3)'}}>
+            <span>📱</span>
+            <span>CapCutを開く</span>
+          </button>
+          <p className="text-xs text-stone-500 mt-3 text-center leading-relaxed">
+            ※CapCutアプリがインストールされていない場合は、<br/>
+            App Store / Google Playからダウンロードしてください
+          </p>
+        </div>
+
+        <div className="section-card" style={{borderLeftColor: '#3498DB'}}>
+          <div className="section-title" style={{color: '#1F618D'}}><span>📝</span><span>投稿キャプション例</span></div>
+          <p className="text-xs text-stone-600 mb-3 leading-relaxed">
+            動画書き出し後、SNSに投稿する際のキャプション例です。<br/>
+            [ ]部分をお店の情報に書き換えてお使いください。
+          </p>
+
+          <div className="mt-2">
+            <div className="text-xs font-bold text-pink-700 mb-1">📷 Instagram用</div>
+            <div className="caption-box">{purposeData.captions.instagram}</div>
+            <button onClick={() => copyText(purposeData.captions.instagram, 'ig')} className={`copy-btn ${copiedKey === 'ig' ? 'copied' : ''}`}>
+              {copiedKey === 'ig' ? '✓ コピーしました' : '📋 コピーする'}
+            </button>
+          </div>
+
+          <div className="mt-4">
+            <div className="text-xs font-bold text-stone-700 mb-1">🎵 TikTok用</div>
+            <div className="caption-box">{purposeData.captions.tiktok}</div>
+            <button onClick={() => copyText(purposeData.captions.tiktok, 'tt')} className={`copy-btn ${copiedKey === 'tt' ? 'copied' : ''}`}>
+              {copiedKey === 'tt' ? '✓ コピーしました' : '📋 コピーする'}
+            </button>
+          </div>
+
+          <div className="mt-4">
+            <div className="text-xs font-bold text-green-700 mb-1">💬 LINE公式用</div>
+            <div className="caption-box">{purposeData.captions.line}</div>
+            <button onClick={() => copyText(purposeData.captions.line, 'ln')} className={`copy-btn ${copiedKey === 'ln' ? 'copied' : ''}`}>
+              {copiedKey === 'ln' ? '✓ コピーしました' : '📋 コピーする'}
+            </button>
+          </div>
+        </div>
+
+        <div className="text-center mt-8">
+          <button onClick={onBackToTop} className="bg-white border-2 border-orange-300 text-orange-700 font-bold px-8 py-3 rounded-full hover:bg-orange-50 transition">
+            🔄 もう一度、別の動画を作る
+          </button>
+        </div>
+
+        <div className="text-center mt-6 text-xs text-stone-500">
+          <p>素敵な動画ができますように🍽✨</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ========== App ==========
 function App() {
   const [screen, setScreen] = useState('top');
   const [selectedPurpose, setSelectedPurpose] = useState(null);
   const [selectedLength, setSelectedLength] = useState(null);
+  const [completedVideos, setCompletedVideos] = useState([]);
 
-  const handleSelectPurpose = (p) => {
-    setSelectedPurpose(p);
-    setScreen('length');
+  const handleSelectPurpose = (p) => { setSelectedPurpose(p); setScreen('length'); window.scrollTo(0, 0); };
+  const handleSelectLength = (vl) => { setSelectedLength(vl); setScreen('cuts'); window.scrollTo(0, 0); };
+  const handleStartShoot = () => { setScreen('shooting'); window.scrollTo(0, 0); };
+  const handleShootComplete = (videos) => { setCompletedVideos(videos); setScreen('completion'); window.scrollTo(0, 0); };
+
+  const handleBackToTop = () => {
+    completedVideos.forEach(v => { if (v.url) URL.revokeObjectURL(v.url); });
+    setCompletedVideos([]);
+    setSelectedPurpose(null);
+    setSelectedLength(null);
+    setScreen('top');
     window.scrollTo(0, 0);
   };
-
-  const handleSelectLength = (vl) => {
-    setSelectedLength(vl);
-    setScreen('cuts');
-    window.scrollTo(0, 0);
-  };
-
-  const handleBackToTop = () => { setScreen('top'); window.scrollTo(0, 0); };
   const handleBackToLength = () => { setScreen('length'); window.scrollTo(0, 0); };
-  const handleStartShoot = () => { /* STEP D で実装 */ };
+  const handleBackToCuts = () => { setScreen('cuts'); window.scrollTo(0, 0); };
 
   if (screen === 'top') return <TopScreen onSelectPurpose={handleSelectPurpose} />;
   if (screen === 'length') return <VideoLengthScreen purpose={selectedPurpose} onSelectLength={handleSelectLength} onBack={handleBackToTop} />;
   if (screen === 'cuts') return <CutListScreen purpose={selectedPurpose} videoLength={selectedLength} onBack={handleBackToLength} onStartShoot={handleStartShoot} />;
+  if (screen === 'shooting') return <ShootingScreen purpose={selectedPurpose} videoLength={selectedLength} onComplete={handleShootComplete} onBack={handleBackToCuts} />;
+  if (screen === 'completion') return <CompletionScreen purpose={selectedPurpose} videoLength={selectedLength} recordedVideos={completedVideos} onBackToTop={handleBackToTop} />;
   return null;
 }
 
