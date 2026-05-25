@@ -71,7 +71,6 @@
     line-height: 1.7;
     white-space: pre-wrap;
     border: 1px solid #F4D03F;
-    position: relative;
   }
   .copy-btn {
     background: #E67E22;
@@ -89,62 +88,107 @@
   .copy-btn.copied {
     background: #27AE60;
   }
+  .camera-btn-big {
+    background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+    color: white;
+    padding: 1.25rem 2rem;
+    border-radius: 9999px;
+    font-size: 1.15rem;
+    font-weight: bold;
+    width: 100%;
+    box-shadow: 0 6px 20px rgba(231, 76, 60, 0.35);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .camera-btn-big:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(231, 76, 60, 0.5);
+  }
+  .camera-btn-big:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: #FFF8E7;
+    border-radius: 0.625rem;
+    margin-bottom: 0.5rem;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .checklist-item.checked {
+    background: #FEF5E7;
+    border-color: #F4D03F;
+  }
+  .checklist-checkbox {
+    width: 28px;
+    height: 28px;
+    border: 2px solid #E67E22;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    flex-shrink: 0;
+    background: white;
+    transition: all 0.2s;
+  }
+  .checklist-item.checked .checklist-checkbox {
+    background: #27AE60;
+    border-color: #27AE60;
+  }
+  .checklist-text {
+    flex: 1;
+    font-size: 0.95rem;
+    color: #4A3528;
+  }
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 50;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    animation: fadeIn 0.2s ease-out;
+  }
+  .modal-content {
+    background: white;
+    width: 100%;
+    max-width: 480px;
+    border-radius: 1.5rem 1.5rem 0 0;
+    padding: 1.5rem;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease-out;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
-const { useState } = React;
+const { useState, useRef } = React;
 
 const purposes = [
-  {
-    id: 'new-menu',
-    icon: '🍽',
-    title: '新メニュー紹介',
-    subtitle: '料理そのものを主役に',
-    description: '湯気とシズル感で「食べたい！」を引き出す。週末投稿が効果的。',
-    recommendedScenes: ['food', 'cooking']
-  },
-  {
-    id: 'lunch',
-    icon: '🌞',
-    title: 'ランチタイム集客',
-    subtitle: 'スピード感とお得感',
-    description: '平日10:30〜11:30の投稿でランチ直前の予約を狙う。',
-    recommendedScenes: ['food', 'interior', 'staff']
-  },
-  {
-    id: 'dinner',
-    icon: '🌙',
-    title: 'ディナー予約獲得',
-    subtitle: '雰囲気と特別感',
-    description: '夜の店内とこだわり料理で「ここに来たい」を作る。',
-    recommendedScenes: ['interior', 'food']
-  },
-  {
-    id: 'takeout',
-    icon: '🥡',
-    title: 'テイクアウト訴求',
-    subtitle: 'パッケージと中身のギャップ',
-    description: '包装→開封→料理アップの3カット構成で購買意欲を刺激。',
-    recommendedScenes: ['food', 'cooking']
-  },
-  {
-    id: 'party',
-    icon: '🍻',
-    title: '宴会・貸切PR',
-    subtitle: '人数感と空間',
-    description: '忘年会・歓送迎会の2ヶ月前から逆算して投稿開始。',
-    recommendedScenes: ['interior', 'food', 'customer']
-  },
-  {
-    id: 'recruit',
-    icon: '👥',
-    title: '採用募集',
-    subtitle: '働く人と職場の空気',
-    description: 'スタッフの表情でリアルな働き方を伝える。通年OK。',
-    recommendedScenes: ['staff', 'cooking']
-  }
+  { id: 'new-menu', icon: '🍽', title: '新メニュー紹介', subtitle: '料理そのものを主役に', description: '湯気とシズル感で「食べたい！」を引き出す。週末投稿が効果的。', recommendedScenes: ['food', 'cooking'] },
+  { id: 'lunch', icon: '🌞', title: 'ランチタイム集客', subtitle: 'スピード感とお得感', description: '平日10:30〜11:30の投稿でランチ直前の予約を狙う。', recommendedScenes: ['food', 'interior', 'staff'] },
+  { id: 'dinner', icon: '🌙', title: 'ディナー予約獲得', subtitle: '雰囲気と特別感', description: '夜の店内とこだわり料理で「ここに来たい」を作る。', recommendedScenes: ['interior', 'food'] },
+  { id: 'takeout', icon: '🥡', title: 'テイクアウト訴求', subtitle: 'パッケージと中身のギャップ', description: '包装→開封→料理アップの3カット構成で購買意欲を刺激。', recommendedScenes: ['food', 'cooking'] },
+  { id: 'party', icon: '🍻', title: '宴会・貸切PR', subtitle: '人数感と空間', description: '忘年会・歓送迎会の2ヶ月前から逆算して投稿開始。', recommendedScenes: ['interior', 'food', 'customer'] },
+  { id: 'recruit', icon: '👥', title: '採用募集', subtitle: '働く人と職場の空気', description: 'スタッフの表情でリアルな働き方を伝える。通年OK。', recommendedScenes: ['staff', 'cooking'] }
 ];
 
 const scenes = [
@@ -155,7 +199,6 @@ const scenes = [
   { id: 'customer', icon: '🥂', title: 'お客様の様子', description: '必ず事前許可を取って撮影' }
 ];
 
-// ========== 共通データ ==========
 const COMMON = {
   basics: [
     '縦撮り（9:16）で撮影。SNSは縦動画が主流',
@@ -176,7 +219,6 @@ const COMMON = {
   ]
 };
 
-// ========== 目的別データ（6パターン） ==========
 const PURPOSE_DATA = {
   'new-menu': {
     timing: '金・土の17:00〜18:00（ディナー予約のピーク前）',
@@ -234,126 +276,69 @@ const PURPOSE_DATA = {
   }
 };
 
-// ========== シーン別データ（5パターン） ==========
 const SCENE_DATA = {
   'food': {
-    lighting: [
-      '窓側の自然光を活かす。窓に対して45度の位置がベスト',
-      '黒いお皿＋逆光で湯気がくっきり映える',
-      '蛍光灯の真下は青白くなるのでNG。窓際を選ぶ'
-    ],
-    smartphone: [
-      '斜め45度が基本。料理に立体感が出る',
-      '真上撮りは平面的に見えるので避ける',
-      'お皿の縁ギリギリまで寄ると迫力アップ'
-    ],
-    tips: [
-      '油やタレが垂れる瞬間を狙うとシズル感が出る',
-      '湯気は逆光＋黒背景で最大限映える',
-      '緑のハーブや赤いソースを「差し色」として配置',
-      '撮る前に料理を5cm手前に動かすと印象が変わる'
-    ],
-    ngExamples: [
-      '真上撮りで料理が平面的に見える',
-      '蛍光灯の真下で青白い色に',
-      '撮影に時間をかけすぎて料理が冷める'
+    lighting: ['窓側の自然光を活かす。窓に対して45度の位置がベスト', '黒いお皿＋逆光で湯気がくっきり映える', '蛍光灯の真下は青白くなるのでNG。窓際を選ぶ'],
+    smartphone: ['斜め45度が基本。料理に立体感が出る', '真上撮りは平面的に見えるので避ける', 'お皿の縁ギリギリまで寄ると迫力アップ'],
+    tips: ['油やタレが垂れる瞬間を狙うとシズル感が出る', '湯気は逆光＋黒背景で最大限映える', '緑のハーブや赤いソースを「差し色」として配置', '撮る前に料理を5cm手前に動かすと印象が変わる'],
+    ngExamples: ['真上撮りで料理が平面的に見える', '蛍光灯の真下で青白い色に', '撮影に時間をかけすぎて料理が冷める'],
+    checklist: [
+      'お皿の位置は中央に整えた？',
+      '光は窓側から入っている？',
+      'スマホは斜め45度の角度？',
+      'お皿の縁ギリギリまで寄った？'
     ]
   },
   'cooking': {
-    lighting: [
-      '厨房の照明＋窓光のミックスがベスト',
-      '火の色を活かすため、白色LEDより電球色がおすすめ',
-      '影が強く出る場合は白い布や紙でレフ板代わりに'
-    ],
-    smartphone: [
-      '手元のアップを意識（顔は映さなくてOK）',
-      '包丁さばきは横から撮るとリズム感が出る',
-      '火を扱うシーンは少し引いて全体感を見せる'
-    ],
-    tips: [
-      '3〜5秒の短いカットを複数撮ってつなぐ',
-      '包丁→盛り付け→完成、の3カットで物語に',
-      '手の動きはゆっくり、丁寧に見えるように',
-      'スマホ保護ケースで油はね対策を忘れずに'
-    ],
-    ngExamples: [
-      '顔を無理に映そうとして不自然に',
-      '油はね対策なしでスマホが汚れる',
-      '撮影に集中しすぎて調理が止まる'
+    lighting: ['厨房の照明＋窓光のミックスがベスト', '火の色を活かすため、白色LEDより電球色がおすすめ', '影が強く出る場合は白い布や紙でレフ板代わりに'],
+    smartphone: ['手元のアップを意識（顔は映さなくてOK）', '包丁さばきは横から撮るとリズム感が出る', '火を扱うシーンは少し引いて全体感を見せる'],
+    tips: ['3〜5秒の短いカットを複数撮ってつなぐ', '包丁→盛り付け→完成、の3カットで物語に', '手の動きはゆっくり、丁寧に見えるように', 'スマホ保護ケースで油はね対策を忘れずに'],
+    ngExamples: ['顔を無理に映そうとして不自然に', '油はね対策なしでスマホが汚れる', '撮影に集中しすぎて調理が止まる'],
+    checklist: [
+      '手元のアップになる位置？',
+      'スマホに保護ケースをつけた？',
+      '3〜5秒で1カット撮れる準備OK？',
+      '油はねやコゲ対策は大丈夫？'
     ]
   },
   'interior': {
-    lighting: [
-      '外観はマジックアワー（日没15〜30分前）が最高',
-      '店内は窓側のテーブルを基準に撮る',
-      '暖簾や看板にスポット光が当たるタイミングを狙う'
-    ],
-    smartphone: [
-      '縦撮り基本。店の縦の広がりを見せる',
-      '入口の正面からまっすぐ撮ると安定感',
-      '店内は入口側から奥に向けて撮ると奥行きが出る'
-    ],
-    tips: [
-      '看板→暖簾→入口→店内の流れで撮ると物語に',
-      '雨の日の夜景も意外と映える',
-      '季節の装飾（桜・紅葉・雪）を意識的に入れる',
-      'お客様の少ない時間に撮影（プライバシー配慮）'
-    ],
-    ngExamples: [
-      '真昼の強い日差しで色が飛ぶ',
-      'お客様が映り込んでしまう',
-      '汚れた窓ガラス越しの撮影'
+    lighting: ['外観はマジックアワー（日没15〜30分前）が最高', '店内は窓側のテーブルを基準に撮る', '暖簾や看板にスポット光が当たるタイミングを狙う'],
+    smartphone: ['縦撮り基本。店の縦の広がりを見せる', '入口の正面からまっすぐ撮ると安定感', '店内は入口側から奥に向けて撮ると奥行きが出る'],
+    tips: ['看板→暖簾→入口→店内の流れで撮ると物語に', '雨の日の夜景も意外と映える', '季節の装飾（桜・紅葉・雪）を意識的に入れる', 'お客様の少ない時間に撮影（プライバシー配慮）'],
+    ngExamples: ['真昼の強い日差しで色が飛ぶ', 'お客様が映り込んでしまう', '汚れた窓ガラス越しの撮影'],
+    checklist: [
+      'スマホは縦持ちにした？',
+      '入口の正面から撮れる位置？',
+      'お客様が映り込まない時間帯？',
+      '看板や暖簾がキレイに見える？'
     ]
   },
   'staff': {
-    lighting: [
-      '顔への直射光は強すぎる。白い紙でレフ板代わりに',
-      '窓を背景にすると逆光になりがち、横からの光を',
-      '電球色の照明だと肌色が温かく自然に写る'
-    ],
-    smartphone: [
-      'カメラ目線より「料理に向き合う表情」が自然',
-      '真剣な眼差し、ふと笑う瞬間が一番いい',
-      'ポートレートモード（被写体ボケ）も効果的'
-    ],
-    tips: [
-      '撮影前に必ず「SNSに出してOK？」と確認',
-      '制服や前掛けがキマっているかチェック',
-      '厨房の動きと一緒に撮ると躍動感が出る',
-      '「カメラ撮るよ」より「いつも通りで」が自然な表情に'
-    ],
-    ngExamples: [
-      '無理に笑わせた不自然な笑顔',
-      '制服がよれている、エプロンが汚れている',
-      '「撮られてる感」が強くて緊張した表情'
+    lighting: ['顔への直射光は強すぎる。白い紙でレフ板代わりに', '窓を背景にすると逆光になりがち、横からの光を', '電球色の照明だと肌色が温かく自然に写る'],
+    smartphone: ['カメラ目線より「料理に向き合う表情」が自然', '真剣な眼差し、ふと笑う瞬間が一番いい', 'ポートレートモード（被写体ボケ）も効果的'],
+    tips: ['撮影前に必ず「SNSに出してOK？」と確認', '制服や前掛けがキマっているかチェック', '厨房の動きと一緒に撮ると躍動感が出る', '「カメラ撮るよ」より「いつも通りで」が自然な表情に'],
+    ngExamples: ['無理に笑わせた不自然な笑顔', '制服がよれている、エプロンが汚れている', '「撮られてる感」が強くて緊張した表情'],
+    checklist: [
+      'SNS掲載OKの確認、もらった？',
+      '制服や前掛けはキマってる？',
+      '顔に直射光が当たっていない？',
+      '自然な表情で動いてもらってる？'
     ]
   },
   'customer': {
-    lighting: [
-      'お客様の顔に光が当たりすぎないよう、間接光で',
-      'テーブル上の料理が主役になる光の入り方を意識',
-      'キャンドル等の温かい光があると雰囲気抜群'
-    ],
-    smartphone: [
-      'テーブル俯瞰（手だけ映る角度）が一番安全',
-      '乾杯シーンは下からのアオリで躍動感を',
-      '後ろ姿からのカットも雰囲気が伝わる'
-    ],
-    tips: [
-      '必ず事前に口頭＋紙で許可を取る（最重要）',
-      '顔出しNGの場合はモザイクやスタンプで加工',
-      '子ども連れの撮影は特に慎重に',
-      '「楽しそう」が伝わる手の動きや笑い声を意識'
-    ],
-    ngExamples: [
-      '許可なしの撮影（絶対NG・クレームのもと）',
-      '顔がはっきり映って個人特定できる構図',
-      'お料理中のお客様の邪魔をする'
+    lighting: ['お客様の顔に光が当たりすぎないよう、間接光で', 'テーブル上の料理が主役になる光の入り方を意識', 'キャンドル等の温かい光があると雰囲気抜群'],
+    smartphone: ['テーブル俯瞰（手だけ映る角度）が一番安全', '乾杯シーンは下からのアオリで躍動感を', '後ろ姿からのカットも雰囲気が伝わる'],
+    tips: ['必ず事前に口頭＋紙で許可を取る（最重要）', '顔出しNGの場合はモザイクやスタンプで加工', '子ども連れの撮影は特に慎重に', '「楽しそう」が伝わる手の動きや笑い声を意識'],
+    ngExamples: ['許可なしの撮影（絶対NG・クレームのもと）', '顔がはっきり映って個人特定できる構図', 'お料理中のお客様の邪魔をする'],
+    checklist: [
+      '事前許可、必ず取った？（最重要）',
+      '顔が映らない角度を選んだ？',
+      'お料理中の邪魔をしていない？',
+      '楽しそうな雰囲気が伝わる構図？'
     ]
   }
 };
 
-// ========== ガイドコンテンツ合成関数 ==========
 function getGuideContent(purposeId, sceneId) {
   return {
     basics: COMMON.basics,
@@ -365,11 +350,207 @@ function getGuideContent(purposeId, sceneId) {
     lighting: SCENE_DATA[sceneId].lighting,
     smartphone: SCENE_DATA[sceneId].smartphone,
     tips: SCENE_DATA[sceneId].tips,
-    ngExamples: SCENE_DATA[sceneId].ngExamples
+    ngExamples: SCENE_DATA[sceneId].ngExamples,
+    checklist: SCENE_DATA[sceneId].checklist
   };
 }
 
-// ========== 画面コンポーネント ==========
+// ========== 撮影前チェックリストモーダル ==========
+function ChecklistModal({ scene, checklistItems, onClose, onShoot }) {
+  const [checkedItems, setCheckedItems] = useState([]);
+
+  const toggleCheck = (index) => {
+    setCheckedItems(prev =>
+      prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
+    );
+  };
+
+  const allChecked = checkedItems.length === checklistItems.length;
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={e => e.stopPropagation()}>
+        <div className="text-center mb-4">
+          <div className="text-4xl mb-2">{scene.icon}</div>
+          <h3 className="text-lg font-bold text-stone-800">撮影前チェック</h3>
+          <p className="text-xs text-stone-500 mt-1">{scene.title}の準備はできていますか？</p>
+        </div>
+
+        <div className="mb-5">
+          {checklistItems.map((item, i) => (
+            <div
+              key={i}
+              className={`checklist-item ${checkedItems.includes(i) ? 'checked' : ''}`}
+              onClick={() => toggleCheck(i)}
+            >
+              <div className="checklist-checkbox">
+                {checkedItems.includes(i) ? '✓' : ''}
+              </div>
+              <div className="checklist-text">{item}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="text-center text-xs text-stone-500 mb-3">
+          {checkedItems.length} / {checklistItems.length} 項目確認済み
+        </div>
+
+        <button
+          onClick={onShoot}
+          disabled={!allChecked}
+          className="camera-btn-big"
+        >
+          <span>📹</span>
+          <span>{allChecked ? '準備OK！撮影する' : '全項目チェックしてください'}</span>
+        </button>
+
+        <button
+          onClick={onClose}
+          className="w-full mt-3 text-sm text-stone-500 py-2 hover:text-stone-700"
+        >
+          あとで撮る
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ========== 撮影後プレビューモーダル ==========
+function PreviewModal({ videoUrl, onRetake, onDone }) {
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <div className="text-center mb-4">
+          <div className="text-4xl mb-2">🎬</div>
+          <h3 className="text-lg font-bold text-stone-800">撮影できました！</h3>
+          <p className="text-xs text-stone-500 mt-1">確認してみましょう</p>
+        </div>
+
+        <video
+          src={videoUrl}
+          controls
+          className="w-full rounded-xl mb-4 bg-black"
+          style={{maxHeight: '50vh'}}
+        />
+
+        <div className="bg-amber-50 rounded-xl p-3 mb-4 text-xs text-stone-700 leading-relaxed">
+          💡 チェックポイント<br/>
+          ・手ブレしてない？<br/>
+          ・料理は美味しそうに見える？<br/>
+          ・余計な音は入ってない？
+        </div>
+
+        <button
+          onClick={onDone}
+          className="camera-btn-big mb-2"
+          style={{background: 'linear-gradient(135deg, #27AE60 0%, #1E8449 100%)', boxShadow: '0 6px 20px rgba(39, 174, 96, 0.35)'}}
+        >
+          <span>✨</span>
+          <span>いい感じ！キャプションへ</span>
+        </button>
+
+        <button
+          onClick={onRetake}
+          className="w-full text-sm bg-white border-2 border-orange-300 text-orange-700 font-bold py-3 rounded-full hover:bg-orange-50 transition"
+        >
+          🔄 もう一度撮り直す
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ========== カメラ起動セクション ==========
+function CameraSection({ scene, checklistItems, onShootComplete }) {
+  const fileInputRef = useRef(null);
+  const [showChecklist, setShowChecklist] = useState(false);
+  const [videoUrl, setVideoUrl] = useState(null);
+
+  const handleStartShooting = () => {
+    setShowChecklist(true);
+  };
+
+  const handleConfirmShoot = () => {
+    setShowChecklist(false);
+    setTimeout(() => {
+      fileInputRef.current?.click();
+    }, 200);
+  };
+
+  const handleCapture = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setVideoUrl(url);
+    }
+    e.target.value = '';
+  };
+
+  const handleRetake = () => {
+    setVideoUrl(null);
+    setTimeout(() => {
+      fileInputRef.current?.click();
+    }, 200);
+  };
+
+  const handleDone = () => {
+    setVideoUrl(null);
+    if (onShootComplete) onShootComplete();
+    const captionSection = document.getElementById('caption-section');
+    if (captionSection) {
+      captionSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  return (
+    <>
+      <div className="section-card" style={{borderLeftColor: '#E74C3C', background: 'linear-gradient(135deg, #FFF8E7 0%, #FEF5E7 100%)'}}>
+        <div className="section-title" style={{color: '#C0392B'}}>
+          <span>📹</span>
+          <span>今すぐ撮影する</span>
+        </div>
+        <p className="text-sm text-stone-700 mb-4 leading-relaxed">
+          ガイドを読んだら、勢いそのままに撮影しましょう！<br/>
+          撮影前にチェックリストで準備状態を確認します。
+        </p>
+        <button onClick={handleStartShooting} className="camera-btn-big">
+          <span>📹</span>
+          <span>撮影スタート</span>
+        </button>
+        <p className="text-xs text-stone-500 mt-3 text-center leading-relaxed">
+          ※スマホの標準カメラが起動します<br/>
+          撮影した動画は端末に自動保存されます
+        </p>
+      </div>
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="video/*"
+        capture="environment"
+        onChange={handleCapture}
+        style={{display: 'none'}}
+      />
+
+      {showChecklist && (
+        <ChecklistModal
+          scene={scene}
+          checklistItems={checklistItems}
+          onClose={() => setShowChecklist(false)}
+          onShoot={handleConfirmShoot}
+        />
+      )}
+
+      {videoUrl && (
+        <PreviewModal
+          videoUrl={videoUrl}
+          onRetake={handleRetake}
+          onDone={handleDone}
+        />
+      )}
+    </>
+  );
+}
 
 function TopScreen({ onSelectPurpose }) {
   return (
@@ -381,7 +562,7 @@ function TopScreen({ onSelectPurpose }) {
           <h1 className="text-3xl md:text-4xl font-bold mb-3 tracking-wide">ココロ・ショート</h1>
           <div className="inline-block bg-white text-orange-600 px-5 py-1 rounded-full text-sm font-bold mb-5 shadow-md">飲食店版</div>
           <p className="text-lg md:text-xl mb-2 font-bold">スマホ1台で、おいしさが伝わる動画を。</p>
-          <p className="text-sm opacity-95">撮り方も、編集も、BGMも、迷わない。</p>
+          <p className="text-sm opacity-95">ガイドを読んで、その場で撮影。</p>
         </div>
       </div>
 
@@ -408,7 +589,7 @@ function TopScreen({ onSelectPurpose }) {
         </div>
 
         <div className="mt-10 pt-6 border-t border-orange-200 text-center text-xs text-stone-500">
-          <p className="mb-2">🍽 ココロ・ショート 飲食店版 ver.1.0</p>
+          <p className="mb-2">🍽 ココロ・ショート 飲食店版 ver.1.1</p>
           <p>Smile Plus Consulting</p>
           <p className="mt-2 text-orange-400">考えるを、ひとりにしない</p>
         </div>
@@ -514,45 +695,35 @@ function GuideScreen({ purpose, scene, onBack }) {
 
         <div className="section-card">
           <div className="section-title"><span>📐</span><span>撮影の基本</span></div>
-          {guide.basics.map((b, i) => (
-            <div key={i} className="bullet-item"><span className="bullet-mark">▶</span><span>{b}</span></div>
-          ))}
+          {guide.basics.map((b, i) => (<div key={i} className="bullet-item"><span className="bullet-mark">▶</span><span>{b}</span></div>))}
         </div>
 
         <div className="section-card">
           <div className="section-title"><span>💡</span><span>{scene.title}のライティング</span></div>
-          {guide.lighting.map((b, i) => (
-            <div key={i} className="bullet-item"><span className="bullet-mark">▶</span><span>{b}</span></div>
-          ))}
+          {guide.lighting.map((b, i) => (<div key={i} className="bullet-item"><span className="bullet-mark">▶</span><span>{b}</span></div>))}
         </div>
 
         <div className="section-card">
           <div className="section-title"><span>📱</span><span>スマホの構え方・角度</span></div>
-          {guide.smartphone.map((b, i) => (
-            <div key={i} className="bullet-item"><span className="bullet-mark">▶</span><span>{b}</span></div>
-          ))}
+          {guide.smartphone.map((b, i) => (<div key={i} className="bullet-item"><span className="bullet-mark">▶</span><span>{b}</span></div>))}
         </div>
 
         <div className="section-card">
           <div className="section-title"><span>✨</span><span>{scene.title}のコツ</span></div>
-          {guide.tips.map((b, i) => (
-            <div key={i} className="bullet-item"><span className="bullet-mark">▶</span><span>{b}</span></div>
-          ))}
+          {guide.tips.map((b, i) => (<div key={i} className="bullet-item"><span className="bullet-mark">▶</span><span>{b}</span></div>))}
         </div>
 
         <div className="section-card" style={{borderLeftColor: '#F4D03F'}}>
           <div className="section-title" style={{color: '#B7950B'}}><span>🍽</span><span>飲食店ならではのコツ</span></div>
-          {guide.restaurantTips.map((b, i) => (
-            <div key={i} className="bullet-item"><span className="bullet-mark" style={{color: '#F4D03F'}}>▶</span><span>{b}</span></div>
-          ))}
+          {guide.restaurantTips.map((b, i) => (<div key={i} className="bullet-item"><span className="bullet-mark" style={{color: '#F4D03F'}}>▶</span><span>{b}</span></div>))}
         </div>
 
         <div className="section-card" style={{borderLeftColor: '#E74C3C'}}>
           <div className="section-title" style={{color: '#C0392B'}}><span>⚠</span><span>やりがちなNG例</span></div>
-          {guide.ngExamples.map((b, i) => (
-            <div key={i} className="bullet-item"><span className="bullet-mark" style={{color: '#E74C3C'}}>✗</span><span>{b}</span></div>
-          ))}
+          {guide.ngExamples.map((b, i) => (<div key={i} className="bullet-item"><span className="bullet-mark" style={{color: '#E74C3C'}}>✗</span><span>{b}</span></div>))}
         </div>
+
+        <CameraSection scene={scene} checklistItems={guide.checklist} />
 
         <div className="section-card" style={{borderLeftColor: '#8B4513'}}>
           <div className="section-title" style={{color: '#8B4513'}}><span>🎬</span><span>CapCut編集の3ステップ</span></div>
@@ -578,7 +749,7 @@ function GuideScreen({ purpose, scene, onBack }) {
           <div className="text-xs text-stone-500 leading-relaxed">※CapCutの無料BGMから雰囲気の合うものを選びましょう</div>
         </div>
 
-        <div className="section-card" style={{borderLeftColor: '#3498DB'}}>
+        <div id="caption-section" className="section-card" style={{borderLeftColor: '#3498DB'}}>
           <div className="section-title" style={{color: '#1F618D'}}><span>📝</span><span>投稿キャプション例</span></div>
 
           <div className="mt-2">
